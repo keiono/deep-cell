@@ -3,13 +3,9 @@ import * as colors from 'material-ui/styles/colors';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SearchIcon from 'material-ui/svg-icons/action/search';
 import ListIcon from 'material-ui/svg-icons/action/list';
-
 import LocationIcon from 'material-ui/svg-icons/device/location-searching';
-
 import SearchTab from './SearchTab'
-
 import TermSearchPanel from './TermSearchPanel'
-
 
 const TERM_SEARCH_MODE = 'term'
 const GENE_SEARCH_MODE = 'gene'
@@ -20,12 +16,11 @@ class SearchPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchMode: GENE_SEARCH_MODE
+      searchMode: TERM_SEARCH_MODE
     };
   }
 
   handleChange = value => {
-
 
     console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ tab selection')
     console.log(value)
@@ -36,7 +31,6 @@ class SearchPanel extends Component {
   }
 
   render() {
-
     // Check show or hide
     const uiState = this.props.uiState
 
@@ -74,44 +68,22 @@ class SearchPanel extends Component {
           <Tab
             icon={<LocationIcon />}
             value={TERM_SEARCH_MODE}
-            label="Locate Terms"
+            label="Search Terms"
           >
             <TermSearchPanel
-
               searchMode={this.state.searchMode}
-
               style={searchStyle}
               search={this.props.search}
               searchActions={this.props.searchActions}
               uiStateActions={this.props.uiStateActions}
               commandActions={this.props.commandActions}
-
               trees={this.props.trees}
               currentNetwork={this.props.currentNetwork}
-            />
-          </Tab>
-
-          <Tab
-            icon={<SearchIcon/>}
-            value={GENE_SEARCH_MODE}
-            label="Search Genes"
-          >
-            <SearchTab
-              searchMode={this.state.searchMode}
-
-              style={searchStyle}
-              search={this.props.search}
-              searchActions={this.props.searchActions}
-              uiStateActions={this.props.uiStateActions}
-              backendServices={this.props.backendServices}
-              queryGenesActions={this.props.queryGenesActions}
-              queryGenes={this.props.queryGenes}
             />
           </Tab>
         </Tabs>
       </div>
     )
-
   }
 }
 

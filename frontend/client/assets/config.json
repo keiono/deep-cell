@@ -1,12 +1,11 @@
 {
-  "title": "DeepCell 1.0",
+  "title": "Ontology Viewer",
   "backendServices": {
     "db": "http://deep-cell.ucsd.edu:9200",
     "simulator": "http://deep-cell.ucsd.edu:8888"
   },
 
   "defaultNetwork": "go",
-
 
   "trees": {
     "go": {
@@ -32,16 +31,7 @@
           }
         }
       },
-      "url": "/data/tree-go.json"
-    },
-    "clixo": {
-      "name": "CLIXO",
-      "rootNode": "CLIXO:10706",
-      "searchOptions": {
-        "index": "terms",
-        "type": "clixo_term"
-      },
-      "url": "/data/tree-clixo.json"
+      "url": "https://gist.githubusercontent.com/keiono/1faf0fceab613e34945cf96a426dbe9c/raw/946f6166e9d99a11ac601228a0305497ed27f5de/FanGO.cyjs"
     }
   }
 }

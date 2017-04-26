@@ -8,10 +8,7 @@ import Errorbar from 'material-ui/Snackbar';
 import SearchPanel from '../SearchPanel'
 
 import Commands from '../Commands'
-
 import style from './style.css'
-import SubTreePanel from '../SubTreePanel'
-
 
 
 export default class NetworkViewer extends Component {
@@ -135,16 +132,6 @@ export default class NetworkViewer extends Component {
           trees={config.get('trees').toJS()}
           backendServices={config.get('backendServices').toJS()}
         />
-
-        {
-          uiState.get('showResult') ?
-            <SubTreePanel
-              uiStateActions={uiStateActions}
-              queryGenesActions={this.props.queryGenesActions}
-              queryGenes={this.props.queryGenes}
-            /> :
-            <div></div>
-        }
 
         <Errorbar
           className={style.errorbar}

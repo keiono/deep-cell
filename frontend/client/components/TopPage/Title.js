@@ -4,13 +4,15 @@ import {browserHistory} from 'react-router'
 import FlatButton from 'material-ui/FlatButton';
 import * as Colors from 'material-ui/styles/colors'
 
+import OntologySelector from './OntologySelector'
+
 import style from './style.css'
 
 
 export default class Title extends Component {
 
   handleStart = () => {
-    browserHistory.push('/viewer')
+    browserHistory.push('/app')
   }
 
   render() {
@@ -26,6 +28,9 @@ export default class Title extends Component {
             Universal browser for hierarchical data sets
           </section>
 
+
+          <OntologySelector />
+          
           <section className={style.start}>
 
             <FlatButton
@@ -41,4 +46,3 @@ export default class Title extends Component {
     )
   }
 }
-

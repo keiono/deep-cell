@@ -8,7 +8,7 @@ class Footer extends Component {
     return (
       <footer className={style.containerFooter}>
         <a href='http://www.cytoscape.org/' target='_blank'>
-          &copy; 2016 University of California, San Diego Trey Ideker Lab
+          &copy; 2017 University of California, San Diego Trey Ideker Lab
         </a>
       </footer>
     )

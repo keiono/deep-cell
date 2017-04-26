@@ -7,6 +7,7 @@ import React from 'react'
 
 // Containers
 import NetworkView from './containers/NetworkView'
+import Ontologies from './containers/Ontologies'
 
 // Store
 import configure from './store'
@@ -20,6 +21,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
 
+      <Route path="/ontologies" component={Ontologies}/>
       <Route path="/app" component={NetworkView}/>
 
     </Router>

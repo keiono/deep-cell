@@ -105,8 +105,6 @@ class NetworkPanel extends Component {
       return false
     }
 
-
-
     return true
   }
 
@@ -116,7 +114,7 @@ class NetworkPanel extends Component {
     this.props.messageActions.setMessage('Neural network browser is ready!')
 
     window.setTimeout(() => {
-      this.props.messageActions.setMessage('DeepCell v1.0')
+      this.props.messageActions.setMessage('Ontology Viewer v0.1')
     }, 3000)
   }
 
@@ -144,54 +142,6 @@ class NetworkPanel extends Component {
     )
   }
 
-  getVisualStyle2 = () => ({
-    style: [ {
-      "selector" : "node",
-      "css" : {
-        "text-valign" : "center",
-        "text-halign" : "right",
-        "shape" : "ellipse",
-        "color" : "#555555",
-        "background-color" : "teal",
-        "height" : 'mapData(geneCount, 0, 6000, 10, 400)',
-        "width" : 'mapData(geneCount, 0, 6000, 10, 400)',
-        "content" : "data(name)",
-        "min-zoomed-font-size": '0.3em',
-        "font-size" : 'mapData(geneCount, 0, 6000, 8, 400)',
-        "text-opacity" : 1,
-        'text-wrap': 'wrap',
-        'text-max-width': '180px'
-      }
-    }, {
-      "selector" : "node:selected",
-      "css" : {
-        "background-color" : "red",
-        "font-size" : '3em',
-        "color" : "red",
-        "text-opacity": 0.7,
-        'text-max-width': '400px',
-        'z-index': 109,
-        "min-zoomed-font-size": 0,
-        width: 25,
-        height: 25
-      }
-    }, {
-      "selector" : "edge",
-      "css" : {
-        "width" : 10.0,
-        'opacity': 0.6,
-        "line-color" : "#555555",
-      }
-    }, {
-      "selector" : "edge:selected",
-      "css" : {
-        "line-color" : "red",
-        "width": 20,
-        'opacity': 1
-      }
-    } ]
-  })
-
   getVisualStyle = () => ({
     style: [ {
       "selector" : "node",
@@ -201,65 +151,20 @@ class NetworkPanel extends Component {
         "shape" : "ellipse",
         "color" : "#000000",
         "background-color" : "rgb(204,204,204)",
-        "height" : 'mapData(geneCount, 1, 6000, 30, 400)',
-        "width" : 'mapData(geneCount, 1, 6000, 30, 400)',
-        "content" : "data(name)",
-        "min-zoomed-font-size": '1.5em',
-        "font-size" : 'mapData(geneCount, 1, 6000, 6, 650)',
+        "height" : 20,
+        "width" : 20,
+        "content" : "data(GO_description)",
+        "font-size" : '2em',
         "text-opacity" : 1,
         'text-wrap': 'wrap',
         // 'text-max-width': '850px',
         'z-index': 1
       }
     }, {
-      "selector" : "node[namespace = 'biological_process']",
-      "css" : {
-        "background-color" : "rgb(0,153,204)",
-      }
-    }, {
-      "selector" : "node[namespace = 'cellular_component']",
-      "css" : {
-        "background-color" : "rgb(255,102,0)",
-        "font-size" : 'mapData(geneCount, 1, 6000, 6, 650)',
-        "min-zoomed-font-size": '4.5em',
-      }
-    }, {
-      "selector" : "node[namespace = 'molecular_function']",
-      "css" : {
-        "background-color" : "rgb(0,204,153)",
-        "font-size" : 'mapData(geneCount, 1, 6000, 6, 1150)',
-      }
-    }, {
-      "selector" : "node[name = 'biological_process']",
-      "css" : {
-        "color" : "rgb(0,153,204)",
-        "label": "Biological Process"
-      }
-    }, {
-      "selector" : "node[name = 'cellular_component']",
-      "css" : {
-        "color" : "rgb(255,102,0)",
-        "label": "Cellular Component"
-      }
-    }, {
-      "selector" : "node[name = 'molecular_function']",
-      "css" : {
-        "color" : "rgb(0,204,153)",
-        "label": "Molecular Function"
-      }
-    }, {
       "selector" : "node[name = 'GO:00SUPER']",
       "css" : {
         'font-size': '20em',
         'label': 'Root'
-      }
-    }, {
-      "selector" :
-        "node[name = 'biological_process'], " +
-        "node[name = 'molecular_function'], " +
-        "node[name = 'cellular_component']",
-      "css" : {
-        'font-size': '55em',
       }
     }, {
       "selector" : "node:selected",
@@ -277,24 +182,9 @@ class NetworkPanel extends Component {
     }, {
       "selector" : "edge",
       "css" : {
-        "width" : 34.0,
+        "width" : 5.0,
         'opacity': 1,
         "line-color" : "rgb(132,132,132)",
-      }
-    }, {
-      "selector" : "edge[branch = 'CC']",
-      "css" : {
-        "line-color" : "rgb(255,102,0)"
-      }
-    }, {
-      "selector" : "edge[branch = 'MF']",
-      "css" : {
-        "line-color" : "rgb(0,204,102)"
-      }
-    }, {
-      "selector" : "edge[branch = 'BP']",
-      "css" : {
-        "line-color" : "rgb(0,153,204)"
       }
     }, {
       "selector" : "edge:selected",
@@ -366,10 +256,6 @@ class NetworkPanel extends Component {
 
 
     let style = this.getVisualStyle()
-
-    if (curNetId === 'clixo') {
-      style = this.getVisualStyle2()
-    }
 
     console.log(style)
 
