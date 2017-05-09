@@ -12,6 +12,9 @@ import property from './property'
 import search from './search'
 import network from './network'
 
+// Raw ineraction data
+import raw_interactions from './raw-interactions'
+
 import ontologies from './ontologies'
 import config from './config'
 
@@ -42,6 +45,7 @@ export default combineReducers({
     visual_styles,
     network,
     ontologies,
-    config
+    config,
+    raw_interactions
   }
 )

@@ -25,6 +25,8 @@ import * as queryGenesActions from '../../actions/query-genes'
 
 import * as messageActions from '../../actions/message'
 
+import * as rawInteractionsActions from '../../actions/raw-interactions'
+
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -84,6 +86,9 @@ function mapStateToProps(state) {
     datasource: state.app_manager.datasource,
 
     network: state.network,
+
+    rawInteractions: state.raw_interactions,
+
     config: state.config,
 
     queryGenes: state.app_manager.query_genes,
@@ -94,7 +99,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+
+    // Main ontology tree
     networkActions: bindActionCreators(networkActions, dispatch),
+
+    // Raw interactions
+    rawInteractionsActions: bindActionCreators(rawInteractionsActions, dispatch),
+
     networkSourceActions: bindActionCreators(networkSourceActions, dispatch),
     commandActions: bindActionCreators(commandActions, dispatch),
     eventActions: bindActionCreators(eventActions, dispatch),

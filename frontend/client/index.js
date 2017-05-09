@@ -21,7 +21,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
 
-      <Route path="/ontologies" component={Ontologies}/>
+      <Route path="/" component={Ontologies}/>
       <Route path="/app" component={NetworkView}/>
 
     </Router>

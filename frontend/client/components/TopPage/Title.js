@@ -29,8 +29,10 @@ export default class Title extends Component {
           </section>
 
 
-          <OntologySelector />
-          
+          <OntologySelector
+            ontologies={this.props.ontologies}
+          />
+
           <section className={style.start}>
 
             <FlatButton

@@ -15,16 +15,25 @@ class OntologySelector extends Component {
   handleChange = (event, index, value) => this.setState({value});
 
   render() {
+
+    const ontologies = this.props.ontologies.toJS()
+    const names = Object.keys(ontologies)
+
     return (
-      <div>
-        <div>
-        <SelectField floatingLabelText="Select an ontology" value={this.state.value} onChange={this.handleChange} autoWidth={true}>
-          <MenuItem value={1} primaryText="FanGO"/>
-          <MenuItem value={2} primaryText="Ontology 1"/>
-          <MenuItem value={3} primaryText="Ontology 2"/>
-        </SelectField>
+      <div className={style.dataSource}>
+        <div className={style.source}>
+          <SelectField floatingLabelText="Select an ontology" value={this.state.value} onChange={this.handleChange} autoWidth={true}>
+            {
+              names.map(
+                (val, i) => {
+                  return <MenuItem key={i} value={val} primaryText={val}/>
+                })
+            }
+
+          </SelectField>
         </div>
-        <TextField hintText="URL of ontology" floatingLabelText="Or, enter ontology URL"/>
+        <TextField className={style.source} hintText="Ontology Name:" floatingLabelText=""/>
+        <TextField className={style.source} hintText="URL of ontology:" floatingLabelText=""/>
       </div>
     )
   }

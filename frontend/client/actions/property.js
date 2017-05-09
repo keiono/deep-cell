@@ -49,6 +49,18 @@ export const fetchEntry = (id, options) => {
   }
 }
 
+export const setProperty = (id, props) => {
+  console.log("*** Props for the term ***")
+  console.log(props)
+
+  return {
+    type: RECEIVE_PROPERTY,
+    id,
+    data: props
+  }
+
+}
+
 export const CLEAR_PROPERTY = 'CLEAR_PROPERTY'
 export const clearProperty = () => {
   return {

@@ -28,16 +28,25 @@ class NetworkPanel extends Component {
     const node = nodeIds[0]
     const props = nodeProps[node]
 
-    console.log('====== Custom node select function called! ========');
+    // From NDEx to CYJS converter
+    const baseUrl = 'http://ci-dev-serv.ucsd.edu:3001/ndex2cyjs/'
+
+    console.log('====== Node selected: ');
+    console.log(props)
 
     window.setTimeout(()=>{
-      const root = this.props.trees[this.props.currentNetwork.id].rootNode
-
-      this.props.eventActions.selected(nodeProps[nodeIds[0]])
-      this.props.commandActions.findPath({startId:nodeIds[0].replace(/\:/, '\\:'), endId: root.replace(/\:/, '\\:')})
+      // const root = this.props.trees[this.props.currentNetwork.id].rootNode
+      //
+      // this.props.eventActions.selected(nodeProps[nodeIds[0]])
+      // this.props.commandActions.findPath({startId:nodeIds[0].replace(/\:/, '\\:'), endId: root.replace(/\:/, '\\:')})
 
       const options = this.props.trees[this.props.currentNetwork.id].searchOptions
-      this.props.propertyActions.fetchEntry(props.id, options)
+      // this.props.propertyActions.fetchEntry(props.id, options)
+
+      // Directly set prop from node attributes
+      const url = 'http://public.ndexbio.org/v2/network/67ef6390-297a-11e7-8f50-0ac135e8bacf'
+      this.props.rawInteractionsActions.fetchInteractionsFromUrl(url)
+      this.props.propertyActions.setProperty(props.id, props)
     }, 0)
   }
 
@@ -151,20 +160,28 @@ class NetworkPanel extends Component {
         "shape" : "ellipse",
         "color" : "#000000",
         "background-color" : "rgb(204,204,204)",
-        "height" : 20,
-        "width" : 20,
-        "content" : "data(GO_description)",
-        "font-size" : '2em',
+        "height" : 10,
+        "width" : 10,
+        "content" : "data(name)",
+        "font-size" : '0.2em',
         "text-opacity" : 1,
         'text-wrap': 'wrap',
         // 'text-max-width': '850px',
         'z-index': 1
       }
     }, {
-      "selector" : "node[name = 'GO:00SUPER']",
+      "selector" : "node[Gene_or_Term = 'Term']",
       "css" : {
-        'font-size': '20em',
-        'label': 'Root'
+        "font-size" : '1.5em',
+        "height" : 20,
+        "width" : 20,
+      }
+    }, {
+      "selector" : "node[name = 'CLIXO:141']",
+      "css" : {
+        'font-size': '5em',
+        "background-color" : "orange",
+        'label': 'Root (CLIXO:141)'
       }
     }, {
       "selector" : "node:selected",
@@ -182,8 +199,8 @@ class NetworkPanel extends Component {
     }, {
       "selector" : "edge",
       "css" : {
-        "width" : 5.0,
-        'opacity': 1,
+        "width" : 2.0,
+        'opacity': 0.6,
         "line-color" : "rgb(132,132,132)",
       }
     }, {
@@ -254,10 +271,14 @@ class NetworkPanel extends Component {
     const networkProp = this.props.network
     const networkData = networkProp.get(url)
 
-
     let style = this.getVisualStyle()
 
     console.log(style)
+
+    // Default layout
+    const rendOpts = {
+      layout: 'preset'
+    }
 
     return (
       <CyViewer
@@ -268,6 +289,7 @@ class NetworkPanel extends Component {
         networkStyle={style}
         eventHandlers={this.getCustomEventHandlers()}
         command={commands}
+        rendererOptions={rendOpts}
       />
     )
   }

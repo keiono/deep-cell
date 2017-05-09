@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Drawer from 'material-ui/Drawer'
 import ClixoDetails from './ClixoDetails'
 import GoDetails from './GoDetails'
+import TermDetailsPanel from './TermDetailsPanel'
 
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
@@ -29,13 +30,19 @@ class PropertyPanel extends Component {
     const selected = this.props.events.get('selected')
     const selectedNew = nextProps.events.get('selected')
 
-    if (selected !== selectedNew) {
+    const currentProperty = this.props.currentProperty
+    const newProperty = nextProps.currentProperty
+
+
+    console.log('--------- Opening props ------------')
+    console.log(this.props)
+
+    if (selected !== selectedNew || currentProperty !== newProperty ) {
       this.setState({
         open: true
       })
     }
   }
-
 
 
   render() {
@@ -77,21 +84,27 @@ class PropertyPanel extends Component {
       return(<div></div>)
     }
 
-    if(curNet === 'go') {
-      return (
-        <GoDetails
-          {...this.props}
-        />
-      )
-    } else if(curNet === 'clixo') {
-      return (
-        <ClixoDetails
-          {...this.props}
-        />
-      )
-    } else {
-      return (<div><h2>Unknown Neural network type</h2></div>)
-    }
+    return (
+      <TermDetailsPanel
+        {...this.props}
+      />
+    )
+
+    // if(curNet === 'go') {
+    //   return (
+    //     <GoDetails
+    //       {...this.props}
+    //     />
+    //   )
+    // } else if(curNet === 'clixo') {
+    //   return (
+    //     <ClixoDetails
+    //       {...this.props}
+    //     />
+    //   )
+    // } else {
+      // return (<div><h2>Unknown Neural network type</h2></div>)
+    // }
   }
 
 }

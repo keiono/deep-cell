@@ -11,6 +11,10 @@ import Commands from '../Commands'
 import style from './style.css'
 
 
+
+/*
+  Main Ontology DAG viewer
+*/
 export default class NetworkViewer extends Component {
 
   constructor(props) {
@@ -46,7 +50,7 @@ export default class NetworkViewer extends Component {
       events, eventActions, networkId, uiState, uiStateActions,
       styles, currentVs, currentVsActions, backgroundColorActions,
       backgroundColor, vsActions, datasource, currentProperty, propertyActions,
-      searchActions, search, network, config, message, messageActions
+      searchActions, search, network, config, message, messageActions, rawInteractionsActions, rawInteractions
 
     } = this.props
 
@@ -59,7 +63,7 @@ export default class NetworkViewer extends Component {
 
 
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ UI")
-    console.log(this.props)
+    console.log(this.props) 
 
     return (
 
@@ -100,6 +104,8 @@ export default class NetworkViewer extends Component {
           currentNetwork={this.props.currentNetwork.toJS()}
 
           messageActions={messageActions}
+
+          rawInteractionsActions={rawInteractionsActions}
         />
 
         <Commands
@@ -131,6 +137,8 @@ export default class NetworkViewer extends Component {
           currentNetwork={this.props.currentNetwork.toJS()}
           trees={config.get('trees').toJS()}
           backendServices={config.get('backendServices').toJS()}
+          rawInteractions={this.props.rawInteractions}
+          rawInteractionsActions={this.props.rawInteractionsActions}
         />
 
         <Errorbar
