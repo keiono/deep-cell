@@ -7,7 +7,7 @@ const defaultState = Map({
   showAppBar: true,
   showCommands: true,
   showResult: false,
-  showSearchWindow: true
+  showSearchWindow: false
 })
 
 export default handleActions({
@@ -24,4 +24,3 @@ export default handleActions({
     state.set('showSearchWindow', action.payload)
   ),
 }, defaultState)
-

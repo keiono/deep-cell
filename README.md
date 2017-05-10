@@ -6,6 +6,16 @@ sample network:
 "url": "https://gist.githubusercontent.com/keiono/1faf0fceab613e34945cf96a426dbe9c/raw/946f6166e9d99a11ac601228a0305497ed27f5de/FanGO.cyjs"
 
 
+## TODO
+
+* Large data support
+    * Human dataset
+
+* Custom visualization for large data sets
+
+* Interaction data handling and storage
+
+
 ## Introduction
 DeepCell Web is an application to provide easy-to-use user interface to the DeepCell neural network for translate cell structure and functions.
 

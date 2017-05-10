@@ -1,61 +1,59 @@
-import {Client} from 'elasticsearch'
 import config from '../assets/config.json'
 
-const client = new Client({
-  host: config.backendServices.db,
-  log: 'info'
-});
-
-
-
 export const FETCH_PROPERTY = 'FETCH_PROPERTY'
-const fetchProperty = (id, options) => {
+const fetchProperty = (id, url, propType) => {
   return {
     type: FETCH_PROPERTY,
+    url,
     id,
-    options
+    propType
   }
 }
 
 
 export const RECEIVE_PROPERTY = 'RECEIVE_PROPERTY'
-const receiveProperty = (id, json) => {
+const receiveProperty = (id, url, json, propType) => {
 
-  console.log("*** Fetch Result ***")
+  console.log("*** Property Fetch Result ***")
   console.log(json)
 
   return {
     type: RECEIVE_PROPERTY,
+    url,
     id,
+    propType,
     data: json
   }
 }
 
-const fetchProp = (id, options) => {
 
-  options.id = id
-  return client.get(options)
+const fetchProp = url => {
+  return fetch(url)
 }
 
-export const fetchEntry = (id, options) => {
+
+export const fetchPropertyFromUrl = (id, url, propType) => {
 
   return dispatch => {
-    dispatch(fetchProperty(id, options))
+    dispatch(fetchProperty(id, url, propType))
 
-    return fetchProp(id, options)
+    return fetchProp(url)
+      .then(response => (response.json()))
       .then(json =>
-        dispatch(receiveProperty(id, json))
+        dispatch(receiveProperty(id, url, json, propType))
       )
   }
 }
 
-export const setProperty = (id, props) => {
-  console.log("*** Props for the term ***")
+export const setProperty = (id, props, propType) => {
+  console.log("*** Directly set props for the term ***")
   console.log(props)
 
   return {
     type: RECEIVE_PROPERTY,
     id,
+    propType,
+    url: null,
     data: props
   }
 
@@ -66,6 +64,8 @@ export const clearProperty = () => {
   return {
     type: CLEAR_PROPERTY,
     id: null,
-    options: {}
+    url: null,
+    propType: null,
+    data: {}
   }
 }

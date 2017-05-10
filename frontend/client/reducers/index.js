@@ -21,6 +21,7 @@ import config from './config'
 import query_genes from './query-genes'
 
 import message from './message'
+import idmap from './idmap'
 
 
 // Application states
@@ -46,6 +47,7 @@ export default combineReducers({
     network,
     ontologies,
     config,
-    raw_interactions
+    raw_interactions,
+    idmap
   }
 )

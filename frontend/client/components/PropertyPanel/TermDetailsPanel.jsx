@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 
 import {List, ListItem} from 'material-ui/List';
+
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 import TitleBar from './TitleBar'
@@ -11,6 +13,8 @@ import PropListPanel from './PropListPanel'
 
 import Immutable from 'immutable'
 import FilterPanel from './FilterPanel'
+
+import SimpleGeneList from './SimpleGeneList'
 
 import Loading from '../Loading'
 import OpenIcon from 'material-ui/svg-icons/action/open-in-new'
@@ -55,37 +59,18 @@ class TermDetailsPanel extends Component {
     })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-
-    if (nextProps.selectedTerm === this.props.selectedTerm) {
-
-      if (nextProps.loading !== this.props.loading) {
-        return true
-      }
-
-      // Same network data
-      if (nextProps.currentProperty.data === this.props.currentProperty.data) {
-        if (nextProps.commands === this.props.commands) {
-          console.log("%%%%%%%%%%%%%%%% SAME COMMAND data")
-          return false;
-        } else {
-          console.log("%%%%%%%%%%%%%%%% NEW COMMAND")
-          return true
-        }
-      }
-
-    }
-
-    return true
-  }
-
   render() {
     console.log("%%%%%%%%%%%%%%%% Rendering Term Panel")
     console.log(this.props)
+    console.log("Raw interactions:")
+    const raw = this.props.rawInteractions.toJS();
+
+    const interactions = raw.interactions
 
     // Term property
     const details = this.props.currentProperty
     if (details === undefined || details === null || details.id === null || details.id === undefined) {
+      console.log("%%%%%%%%%%%%%%%% EMPTY---------------Panel")
       return (
         <div></div>
       )
@@ -102,105 +87,48 @@ class TermDetailsPanel extends Component {
 
     let subnet = null
 
+    let nodeList = []
     if (data === undefined) {
       entry = {}
     } else {
       entry = data
-      subnet = this.buildNetwork(entry.genes, entry.interactions)
-      subnet = Immutable.fromJS(subnet)
+      subnet = interactions
+
+      if(subnet !== null && subnet !== undefined) {
+        nodeList = subnet.elements.nodes.map(node=>(node.data.name))
+      }
     }
 
     const keys = Object.keys(data)
 
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@ render PANEL @@@@@@@@@@@@@@@@@@@@")
+    console.log(nodeList)
+
+
     return (
       <div>
-        {/* <RawInteractionPanel subnet={subnet} selectedTerm={this.props.currentProperty.id} handleClose={this.props.handleClose} commandActions={this.props.commandActions} loading={this.props.currentProperty.loading} colorFunction={colorFunction} scoreFilter={this.state.scoreFilter} commands={this.props.commands}/> */}
+        <RawInteractionPanel
+          subnet={interactions}
+          selectedTerm={this.props.currentProperty.id}
+          handleClose={this.props.handleClose}
+          commandActions={this.props.commandActions}
+          loading={this.props.currentProperty.loading}
+        />
 
         <FilterPanel colorFunction={colorFunction} setScore={this.setScore}/>
 
         <TitleBar title={entry.name}/>
 
-        < Divider/>
+        <Divider/>
 
         <PropListPanel data={entry}/>
+
+        <SimpleGeneList genes={nodeList}/>
+
+
       </div>
     )
-  }
-
-  buildNetwork = (genes, interactions) => {
-
-    console.log('------------------------- building Tree')
-
-    const network = {
-      data: {
-        name: 'tree'
-      },
-      elements: {
-        nodes: [],
-        edges: []
-      }
-    }
-
-    if (interactions === undefined || genes === undefined) {
-      return network
-    }
-
-    const nodes = []
-
-    const ids = new Set()
-
-    genes.map(gene => {
-      ids.add(gene.sgdid)
-      nodes.push(this.getNode(gene.sgdid, gene.symbol, gene.name))
-    })
-
-    const edges = []
-
-    interactions.map(row => {
-      const source = row.source
-      const target = row.target
-
-      // if(!ids.has(source)) {
-      //   nodes.push(this.getNode(source, source))
-      // }
-      //
-      // if(!ids.has(target)) {
-      //   nodes.push(this.getNode(target, target))
-      // }
-
-      const score = row.score
-      const type = row.interaction
-
-      const edge = this.getEdge(source, target, score, type)
-      edges.push(edge)
-
-    })
-
-    network.elements.nodes = nodes
-    network.elements.edges = edges
-
-    return network
-  }
-
-  getNode = (sgd, symbol, name) => {
-    return {
-      data: {
-        id: sgd,
-        name: symbol,
-        fullName: name
-      }
-    }
-  }
-
-  getEdge = (source, target, score, type) => {
-    return {
-      data: {
-        source: source,
-        target: target,
-        score: score,
-        interaction: type
-      }
-    }
   }
 
   _handleTouchTap = id => {

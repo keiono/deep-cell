@@ -2,9 +2,11 @@ import React, {Component} from 'react'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 
-
+/**
+  A React component for selecting a network data source.
+  (Implemented as a simple )
+*/
 class NetworkSelector extends Component {
-
 
   handleChange = (event, index, value) => {
 

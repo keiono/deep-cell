@@ -3,6 +3,8 @@ import {FETCH_PROPERTY, RECEIVE_PROPERTY, CLEAR_PROPERTY} from '../actions/prope
 
 const defaultState = {
   id: null,
+  propType: null,
+  url: null,
   data: {},
   loading: false
 }
@@ -16,6 +18,8 @@ export default function currentPropertyState(state = defaultState, action) {
       console.log('+++++++++++++++ Fetch 1 ++++++++++++++')
       return {
         id: action.id,
+        url: action.url,
+        propType: action.propType,
         data: {},
         loading: true
       }
@@ -25,6 +29,8 @@ export default function currentPropertyState(state = defaultState, action) {
 
       return {
         id: action.id,
+        propType: action.propType,
+        url: action.url,
         data: action.data,
         loading: false
       }
@@ -33,6 +39,8 @@ export default function currentPropertyState(state = defaultState, action) {
 
       return {
         id: null,
+        propType: null,
+        url: null,
         data: {},
         loading: false
       }
@@ -40,4 +48,3 @@ export default function currentPropertyState(state = defaultState, action) {
       return state
   }
 }
-

@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import Drawer from 'material-ui/Drawer'
 import ClixoDetails from './ClixoDetails'
 import GoDetails from './GoDetails'
+
 import TermDetailsPanel from './TermDetailsPanel'
+import GenePropertyPanel from './GenePropertyPanel'
 
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
@@ -84,27 +86,23 @@ class PropertyPanel extends Component {
       return(<div></div>)
     }
 
-    return (
-      <TermDetailsPanel
-        {...this.props}
-      />
-    )
+    const propType = this.props.currentProperty.propType
 
-    // if(curNet === 'go') {
-    //   return (
-    //     <GoDetails
-    //       {...this.props}
-    //     />
-    //   )
-    // } else if(curNet === 'clixo') {
-    //   return (
-    //     <ClixoDetails
-    //       {...this.props}
-    //     />
-    //   )
-    // } else {
-      // return (<div><h2>Unknown Neural network type</h2></div>)
-    // }
+    if(propType === 'term') {
+      return (
+        <TermDetailsPanel
+          {...this.props}
+        />
+      )
+    } else if (propType === 'gene') {
+      return (
+        <GenePropertyPanel
+          {...this.props}
+        />
+      )
+    } else {
+      return(<div><h2>Unknown prop type</h2></div>)
+    }
   }
 
 }

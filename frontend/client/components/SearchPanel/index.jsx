@@ -44,7 +44,7 @@ class SearchPanel extends Component {
       maxWidth: '450px',
       position: 'fixed',
       left: '0.3em',
-      top: '5em',
+      top: '6em',
       zIndex: 999
     };
 

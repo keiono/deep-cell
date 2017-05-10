@@ -34,6 +34,15 @@ export const fetchNetworkFromUrl = url => {
   }
 }
 
+export const idMapping = json => {
+
+    fetch(url, {method: "POST"})
+      .then(response => (response.json()))
+      .then(json => {
+        dispatch(receiveNetwork(url, json))
+      })
+}
+
 export const DELETE_NETWORK = 'DELETE_NETWORK'
 const deleteNetwork = url => {
   return {

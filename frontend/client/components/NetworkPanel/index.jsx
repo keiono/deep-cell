@@ -24,17 +24,46 @@ class NetworkPanel extends Component {
   }
 
 
+
   selectNodes = (nodeIds, nodeProps) => {
     const node = nodeIds[0]
     const props = nodeProps[node]
 
+    // There are two cases: Gene or term
+
+    // Get node type:
+
+    const nodeTypeTag = 'Gene_or_Term'
+    const nodeType = props[nodeTypeTag]
+
+    if(nodeType === null || nodeType === undefined) {
+      // Error handler will be here...
+      return
+    }
+
+    console.log('-------------> type: ' + nodeType)
+
+
+    if(nodeType === 'Gene') {
+      // Just fetch property
+      const myGeneUrl = 'http://mygene.info/v3/gene'
+      const qUrl = myGeneUrl + '/' + props.name
+      this.props.propertyActions.fetchPropertyFromUrl(props.id, qUrl, 'gene')
+      return
+    }
     // From NDEx to CYJS converter
-    const baseUrl = 'http://ci-dev-serv.ucsd.edu:3001/ndex2cyjs/'
+    const linkKey = 'ndex_internalLink'
+    const baseUrl = 'http://localhost:3001/ndex2cyjs/'
 
     console.log('====== Node selected: ');
     console.log(props)
 
+    const link = baseUrl + props[linkKey]
+    console.log(link);
+
     window.setTimeout(()=>{
+      // Path finding
+
       // const root = this.props.trees[this.props.currentNetwork.id].rootNode
       //
       // this.props.eventActions.selected(nodeProps[nodeIds[0]])
@@ -45,8 +74,8 @@ class NetworkPanel extends Component {
 
       // Directly set prop from node attributes
       const url = 'http://public.ndexbio.org/v2/network/67ef6390-297a-11e7-8f50-0ac135e8bacf'
-      this.props.rawInteractionsActions.fetchInteractionsFromUrl(url)
-      this.props.propertyActions.setProperty(props.id, props)
+      this.props.rawInteractionsActions.fetchInteractionsFromUrl(link)
+      this.props.propertyActions.setProperty(props.id, props, 'term')
     }, 0)
   }
 
@@ -83,6 +112,8 @@ class NetworkPanel extends Component {
       if(nextNet.id !== this.props.currentNetwork.id) {
         this.props.networkActions.fetchNetworkFromUrl(newUrl)
       }
+    } else {
+
     }
   }
 
@@ -159,7 +190,7 @@ class NetworkPanel extends Component {
         "text-halign" : "right",
         "shape" : "ellipse",
         "color" : "#000000",
-        "background-color" : "rgb(204,204,204)",
+        "background-color" : "teal",
         "height" : 10,
         "width" : 10,
         "content" : "data(name)",
@@ -173,13 +204,14 @@ class NetworkPanel extends Component {
       "selector" : "node[Gene_or_Term = 'Term']",
       "css" : {
         "font-size" : '1.5em',
-        "height" : 20,
-        "width" : 20,
+        "height" : 30,
+        "width" : 30,
+        "background-color" : "rgb(200,200,200)"
       }
     }, {
       "selector" : "node[name = 'CLIXO:141']",
       "css" : {
-        'font-size': '5em',
+        'font-size': '3em',
         "background-color" : "orange",
         'label': 'Root (CLIXO:141)'
       }

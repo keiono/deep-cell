@@ -14,7 +14,7 @@ export default function networkState(state = defState, action) {
     case RECEIVE_INTERACTIONS:
       console.log('+++++++++++++++ Raw interaction Fetch finished 2 ++++++++++++++')
       const finishedState = state.set('loading', false)
-      return finishedState.set(action.url, action.network)
+      return finishedState.set('interactions', action.network)
     default:
       return state
   }

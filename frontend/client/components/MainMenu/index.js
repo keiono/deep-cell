@@ -104,7 +104,7 @@ export default class MainMenu extends Component {
             src={logo}
           />
           <h1 className={style.title}>
-            DeepCell v1.0
+            Ontology Viewer v1.0
           </h1>
         </div>
 

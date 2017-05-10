@@ -63,7 +63,7 @@ export default class NetworkViewer extends Component {
 
 
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ UI")
-    console.log(this.props) 
+    console.log(this.props)
 
     return (
 
@@ -106,6 +106,8 @@ export default class NetworkViewer extends Component {
           messageActions={messageActions}
 
           rawInteractionsActions={rawInteractionsActions}
+
+          idmapActions={this.props.idmapActions}
         />
 
         <Commands

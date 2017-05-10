@@ -8,19 +8,26 @@ class TitleBar extends Component {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column',
       background: this.props.background,
       textAlign: 'center',
       color: 'white',
       margin: 0,
-      padding: '1.7em',
-      minHeight: '4em',
+      padding: '0.3em',
+      minHeight: '3em',
     }
+
 
     return (
       <div style={style}>
-        <h1 style={{textAlign: 'center', lineHeight: 1.3}}>
-          {this.props.title}
-        </h1>
+        <div>
+          <h1 style={{textAlign: 'center', lineHeight: 1.3}}>
+            {this.props.title}
+          </h1>
+        </div>
+        <div>
+          <h4>{this.props.geneId}</h4>
+        </div>
       </div>
     )
   }

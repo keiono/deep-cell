@@ -27,6 +27,8 @@ import * as messageActions from '../../actions/message'
 
 import * as rawInteractionsActions from '../../actions/raw-interactions'
 
+import * as idmapActions from '../../actions/idmap'
+
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -92,7 +94,9 @@ function mapStateToProps(state) {
     config: state.config,
 
     queryGenes: state.app_manager.query_genes,
-    message: state.app_manager.message
+    message: state.app_manager.message,
+
+    idmap: state.idmap
 
   }
 }
@@ -105,6 +109,9 @@ function mapDispatchToProps(dispatch) {
 
     // Raw interactions
     rawInteractionsActions: bindActionCreators(rawInteractionsActions, dispatch),
+
+    // ID Mapping
+    idmapActions: bindActionCreators(idmapActions, dispatch),
 
     networkSourceActions: bindActionCreators(networkSourceActions, dispatch),
     commandActions: bindActionCreators(commandActions, dispatch),

@@ -49,7 +49,7 @@ class RawInteractionPanel extends Component {
 
     const style = {
       width: '100%',
-      height: '50em',
+      height: '40em',
       background: '#000000'
     }
 
@@ -68,6 +68,7 @@ class RawInteractionPanel extends Component {
 
   getMainContents = () => {
 
+    console.log("%%%%%%%%%%%%%%%% Rendering Main contents =====================================")
     if(this.props.subnet === null || this.props.subnet === undefined) {
       return (<div></div>)
     }
@@ -86,7 +87,7 @@ class RawInteractionPanel extends Component {
       return (
           <CyViewer
             key="subNetworkView"
-            network={this.props.subnet.toJS()}
+            network={this.props.subnet}
             networkType={'cyjs'}
             networkStyle={this.getStyle()}
             style={networkAreaStyle}
@@ -114,7 +115,6 @@ class RawInteractionPanel extends Component {
         "height" : 15.0,
         "font-size" : '3em',
         "content" : "data(name)",
-        "min-zoomed-font-size": '0.2em',
       }
     }, {
       "selector" : "node:selected",
@@ -122,33 +122,20 @@ class RawInteractionPanel extends Component {
         "background-color" : "red",
         "font-size" : "4em",
         "color" : "orange",
-        content: "data(fullName)",
+        content: "data(name)",
         "text-max-width": '200px'
       }
     }, {
       "selector" : "edge",
       "css" : {
-        "width" : "mapData(score, 0.0, 1.0, 0.1, 7.0)",
-        "opacity" : "mapData(score, 0.0, 1.0, 0.01, 0.7)",
-
-        // "line-color": 'white'
-        "line-color" : ele => {
-          const type = ele.data("interaction")
-          const c = this.props.colorFunction(type)
-          return c
-        },
+        "width" : 2,
+        "line-color": 'white'
       }
     }, {
       "selector" : "edge:selected",
       "css" : {
         "line-color" : "rgb(255,0,0)",
         "width": 14
-      }
-    }, {
-      "selector" : ".dark",
-      "css" : {
-        // "line-color": "red",
-        "visibility": 'hidden'
       }
     } ]
   })
@@ -158,20 +145,9 @@ class RawInteractionPanel extends Component {
     const node = nodeIds[0]
     const props = nodeProps[node]
 
-
     console.log('RAW ============================================================== Custom node select function called! ========');
     console.log('Selected Node ID: ' + node)
     console.log(props)
-
-    window.setTimeout(()=>{
-      // const root = this.props.trees[this.props.currentNetwork.id].rootNode
-
-      // this.props.commandActions.focus({idList: [props.id]})
-      // this.props.commandActions.findPath({startId:nodeIds[0].replace(/\:/, '\\:'), endId: root.replace(/\:/, '\\:')})
-
-      // const options = this.props.trees[this.props.currentNetwork.id].searchOptions
-      // this.props.propertyActions.fetchEntry(props.id, options)
-    }, 0)
   }
 
   selectEdges = (edgeIds, edgeProps) => {
@@ -188,4 +164,3 @@ class RawInteractionPanel extends Component {
 }
 
 export default RawInteractionPanel
-
