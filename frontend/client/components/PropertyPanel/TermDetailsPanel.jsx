@@ -101,10 +101,7 @@ class TermDetailsPanel extends Component {
 
     const keys = Object.keys(data)
 
-
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@ render PANEL @@@@@@@@@@@@@@@@@@@@")
-    console.log(nodeList)
-
 
     return (
       <div>

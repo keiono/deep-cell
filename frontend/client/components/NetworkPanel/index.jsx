@@ -3,6 +3,8 @@ import {browserHistory} from 'react-router'
 
 import CyViewer from 'cy-viewer'
 
+import CirclePacking from '../CirclePacking'
+
 import Loading from '../Loading'
 
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
@@ -12,6 +14,8 @@ import FlatButton from 'material-ui/FlatButton'
 import style from './style.css'
 
 import {Map} from 'immutable'
+
+import * as d3Hierarchy from 'd3-hierarchy'
 
 
 class NetworkPanel extends Component {
@@ -99,7 +103,9 @@ class NetworkPanel extends Component {
   componentWillMount() {
     const url = this.props.trees[this.props.currentNetwork.id].url
     this.props.networkActions.fetchNetworkFromUrl(url)
+
   }
+
 
   componentWillReceiveProps(nextProps) {
     const nextNet = nextProps.currentNetwork
@@ -186,42 +192,45 @@ class NetworkPanel extends Component {
     style: [ {
       "selector" : "node",
       "css" : {
+        "content" : "data(name)",
         "text-valign" : "center",
         "text-halign" : "right",
         "shape" : "ellipse",
-        "color" : "#000000",
+        "color" : "#666666",
         "background-color" : "teal",
         "height" : 10,
         "width" : 10,
-        "content" : "data(name)",
-        "font-size" : '0.2em',
+        "font-size" : '0.1em',
         "text-opacity" : 1,
         'text-wrap': 'wrap',
         // 'text-max-width': '850px',
-        'z-index': 1
+        'z-index': 1,
+        "text-margin-x": '0.2em'
       }
     }, {
       "selector" : "node[Gene_or_Term = 'Term']",
       "css" : {
-        "font-size" : '1.5em',
-        "height" : 30,
-        "width" : 30,
-        "background-color" : "rgb(200,200,200)"
+        "content" : "data(name)",
+        "font-size" : '2em',
+        "height" : 20,
+        "width" : 20,
+        "background-color" : "#607D8B"
       }
     }, {
       "selector" : "node[name = 'CLIXO:141']",
       "css" : {
-        'font-size': '3em',
+        'font-size': '2em',
         "background-color" : "orange",
-        'label': 'Root (CLIXO:141)'
+        "color" : "orange",
+        'label': 'CLIXO:141'
       }
     }, {
       "selector" : "node:selected",
       "css" : {
         "background-color" : "red",
-        "font-size" : '7em',
+        "font-size" : '4em',
         "color" : "red",
-        "text-opacity": 0.7,
+        "text-opacity": 1,
         'text-max-width': '400px',
         'z-index': 109,
         "min-zoomed-font-size": 0,
@@ -232,7 +241,7 @@ class NetworkPanel extends Component {
       "selector" : "edge",
       "css" : {
         "width" : 2.0,
-        'opacity': 0.6,
+        'opacity': 0.4,
         "line-color" : "rgb(132,132,132)",
       }
     }, {
@@ -312,6 +321,17 @@ class NetworkPanel extends Component {
       layout: 'preset'
     }
 
+
+
+    if(networkData === undefined) {
+      return (
+        <Loading />
+      )
+    }
+
+
+
+
     return (
       <CyViewer
         key="mainView"
@@ -324,6 +344,74 @@ class NetworkPanel extends Component {
         rendererOptions={rendOpts}
       />
     )
+  }
+
+  getTree = (root, tree) => {
+    const nodes = tree.elements.nodes
+    let rootId = null;
+
+    for (let node of nodes) {
+      if (node.data.name === root) {
+        rootId = node.data.id
+        break
+      }
+    }
+
+    const csv = []
+    csv.push({name: rootId, parent: ""})
+
+    const edges = tree.elements.edges
+    edges.forEach(edge => {
+      const source = edge.data.source
+      const target = edge.data.target
+
+      csv.push({name: source, parent: target})
+    })
+
+    console.log('********** ROOT: ' + rootId)
+    const d3tree = d3Hierarchy.stratify().id(function(d) {
+      return d.name;
+    }).parentId(function(d) {
+      return d.parent;
+    })(csv);
+
+    console.log(d3tree)
+
+    const layout = d3Hierarchy.tree().size([800, 800]).separation(function(a, b) {
+      return (a.parent == b.parent
+        ? 1
+        : 2) / a.depth;
+    });
+
+    layout(d3tree)
+    console.log('---------- Done! -------------')
+    console.log(d3tree)
+
+    const layoutMap = {}
+    this.walk(d3tree, layoutMap)
+
+    console.log(layoutMap)
+    return layoutMap
+  }
+
+  applyLayout = (layoutMap, network) => {
+    const nodes = network.elements.nodes
+    nodes.forEach(node=> {
+      node.position.x = layoutMap[node.data.id][0]
+      node.position.y = layoutMap[node.data.id][1]
+    })
+  }
+
+  walk = (node, layoutMap) => {
+    const children = node.children
+    if(children === undefined || children.length === 0) {
+      console.log("Tree node = " + node.id)
+
+      layoutMap[node.id] = [node.x, node.y]
+      return
+    } else {
+      children.forEach(child=> this.walk(child, layoutMap))
+    }
   }
 }
 

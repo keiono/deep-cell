@@ -9,8 +9,8 @@
 
   "trees": {
     "go": {
-      "name": "Gene Ontology",
-      "rootNode": "GO:00SUPER",
+      "name": "FanGO",
+      "rootNode": "CLIXO:141",
       "searchOptions": {
         "index": "terms",
         "type": "go_term"

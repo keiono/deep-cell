@@ -128,8 +128,9 @@ class RawInteractionPanel extends Component {
     }, {
       "selector" : "edge",
       "css" : {
-        "width" : 2,
-        "line-color": 'white'
+        "width" : "mapData(weight, 1.0, 8.0, 1, 10)",
+        "line-color": 'white',
+        "opacity": 0.8
       }
     }, {
       "selector" : "edge:selected",
