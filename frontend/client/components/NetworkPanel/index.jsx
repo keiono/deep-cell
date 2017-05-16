@@ -212,8 +212,8 @@ class NetworkPanel extends Component {
       "css" : {
         "content" : "data(name)",
         "font-size" : '2em',
-        "height" : 20,
-        "width" : 20,
+        "height" : "mapData(Size, 1, 1000, 5, 200)",
+        "width" : "mapData(Size, 1, 1000, 5, 200)",
         "background-color" : "#607D8B"
       }
     }, {

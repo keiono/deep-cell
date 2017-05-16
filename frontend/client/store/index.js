@@ -1,14 +1,19 @@
-import {createStore, applyMiddleware} from 'redux'
-
-import {logger} from '../middleware'
 import thunk from 'redux-thunk'
+import {
+  createStore,
+  applyMiddleware
+} from 'redux'
+
+import {
+  logger
+} from '../middleware'
 import rootReducer from '../reducers'
 
 export default function configure(initialState) {
 
-  const create = window.devToolsExtension
-    ? window.devToolsExtension()(createStore)
-    : createStore
+  const create = window.devToolsExtension ?
+    window.devToolsExtension()(createStore) :
+    createStore
 
   const createStoreWithMiddleware = applyMiddleware(
     thunk, logger

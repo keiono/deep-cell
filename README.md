@@ -1,4 +1,7 @@
-# Deep Translate Prototype
+# Deep Translate
+
+For now, this is a simple viewer for hierachical data.
+
 (TBD)
 
 sample network:

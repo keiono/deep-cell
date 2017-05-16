@@ -15,16 +15,13 @@ import configure from './store'
 const store = configure()
 const history = syncHistoryWithStore(browserHistory, store)
 
-
 // Start the application
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
+  <Router history={history}>
 
-      <Route path="/" component={Ontologies}/>
-      <Route path="/app" component={NetworkView}/>
+    <Route path="/" component={Ontologies}/>
+    <Route path="/app" component={NetworkView}/>
 
-    </Router>
-  </Provider>,
-  document.getElementById('root')
-)
+  </Router>
+</Provider>, document.getElementById('root'))
