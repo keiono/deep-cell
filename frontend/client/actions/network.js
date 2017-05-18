@@ -148,9 +148,9 @@ const getTree = (rootId, tree) => {
 
   var layout = d3Hierarchy
     .cluster()
-    .size([360, 1200])
+    .size([360, 1600])
     .separation((a, b) => {
-      return (a.parent === b.parent ? 1 : 2) / a.depth
+      return (a.parent === b.parent ? 1: 2) / a.depth
     });
 
   layout(d3tree)
@@ -182,14 +182,31 @@ const applyLayout = (layoutMap, network) => {
       // node.position.x = position[0]* 10
       // node.position.y = position[1]* 10
       // console.log(newPos[2]*180/Math.PI)
-      if (node.data.Size === 1 || depth > 5) {
+      if (node.data.Size === 1 || depth > 1) {
         let angle = newPos[2]
         // let angle = newPos[2]*180/Math.PI
+        if(angle <= Math.PI * 1.5 && angle >= Math.PI/2.0) {
+            angle = angle + Math.PI
+            // if(node.data.Size === 1) {
+            //   node.position.x = -1205
+            //   node.position.y = newPos[1] * 12
+            // }
+        } else {
+          // if(node.data.Size === 1) {
+          //   node.position.x = 1205
+          //   node.position.y = newPos[1] * 12
+          // }
+        }
         node.data.angle = angle
-        console.log(angle)
       } else {
-        node.data.angle = '0deg'
+        node.data.angle = 0
       }
+
+      // Leaf nodes
+      // if(node.data.Size === 1) {
+      //   node.position.x = newPos[0]*3
+      //   node.position.y = newPos[1]*3
+      // }
     } else {
       console.log('ERRRRRRRRRRRR: ' + node.data.id)
     }
@@ -204,6 +221,16 @@ const project = (x, y) => {
   return [
     radius * Math.cos(angle),
     radius * Math.sin(angle),
+    angle
+  ];
+}
+
+const project2 = (x, y) => {
+  const angle = (x - 90) / 180 * Math.PI
+  const radius = y
+  return [
+    radius * Math.cos(angle*2),
+    radius * Math.sin(angle*2),
     angle
   ];
 }

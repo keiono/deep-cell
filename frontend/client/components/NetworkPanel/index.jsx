@@ -201,37 +201,46 @@ class NetworkPanel extends Component {
           "text-halign": "right",
           "shape": "ellipse",
           "color": "#666666",
-          "background-color": '#80DEEA',
-          "height": 2,
-          "width": 2,
+          "background-color": '#AAAAAA',
+          "height": 5,
+          "width": 5,
           "text-opacity": 0.8,
           'text-wrap': 'wrap',
           'z-index': 1,
-          'text-rotation': 'data(angle)'
-          // 'min-zoomed-font-size': '0.1em'
+          'text-margin-x': 2,
+          'text-rotation': 'data(angle)',
+          'min-zoomed-font-size': '0.2em'
         }
       }, {
-        "selector": 'node[angle <= ' + (Math.PI * 1.5) + '][angle >=' + (Math.PI/2.0) + ']',
+      //   "selector": 'node[Size <= 5]',
+      //   "css": {
+      //     'visibility': 'hidden'
+      //   }
+      // }, {
+        "selector": 'node[angle <= ' + (Math.PI + Math.PI * 1.5) + '][angle >=' + (Math.PI + Math.PI/2.0) + ']',
         "css": {
-          'color': 'red'
+          "text-halign": "left",
+
         }
       }, {
         "selector": "node[Gene_or_Term = 'Gene']",
         "css": {
-          "font-size": 0.1,
+          "font-size": 1,
+          'text-rotation': 0,
+          'visibility': 'hidden'
         }
       }, {
         "selector": "node[Gene_or_Term = 'Term']",
         "css": {
-          'font-size': 'mapData(Size,' + minSize + ',' + maxSize + ', 2, 60)',
-          height: 'mapData(Size,' + minSize + ',' + maxSize + ', 1, 100)',
-          width: 'mapData(Size,' + minSize + ',' + maxSize + ', 1, 100)',
+          'font-size': 'mapData(Size,' + minSize + ',' + maxSize + ', 0.1, 20)',
+          height: 'mapData(Size,' + minSize + ',' + maxSize + ', 6, 50)',
+          width: 'mapData(Size,' + minSize + ',' + maxSize + ', 6, 50)',
           "background-color": "#607D8B"
         }
       }, {
         "selector": "node[isRoot = 'True']",
         "css": {
-          'font-size': '4em',
+          'font-size': '3em',
           "background-color": 'darkorange',
           "color": "darkorange"
         }
@@ -239,22 +248,28 @@ class NetworkPanel extends Component {
         "selector": "node:selected",
         "css": {
           "background-color": 'orange',
-          "font-size": '4em',
+          "font-size": '1em',
           "color": 'orange',
           "text-opacity": 1,
-          'z-index': 999
+          'z-index': 999,
+          'visibility': 'visible'
         }
       }, {
         "selector": "edge",
         "css": {
-          'curve-style': 'bezier',
           "width": 1.0,
           'opacity': 0.2,
           'mid-target-arrow-shape': 'triangle',
-          'mid-target-arrow-color': 'rgb(152,152,152)',
-          'target-arrow-shape': 'triangle',
-          'target-arrow-color': 'rgb(152,152,152)',
-          "line-color": "rgb(152,152,152)"
+          'mid-target-arrow-color': '#777777',
+          "line-color": "#777777"
+        }
+      }, {
+        "selector": "edge[EdgeType = 'Gene-Term']",
+        "css": {
+          "line-color": 'teal',
+          'opacity': 0.2,
+          'mid-target-arrow-shape': 'none',
+          width: 0.2
         }
       }, {
         "selector": "edge:selected",
@@ -262,9 +277,9 @@ class NetworkPanel extends Component {
           "line-color": 'orange',
           'mid-target-arrow-color': 'orange',
           'target-arrow-color': 'orange',
-          "width": 8,
+          "width": 3,
           'z-index': 999,
-          'opacity': 0.7
+          'opacity': 1
         }
       }, {
         "selector": ".focused",
