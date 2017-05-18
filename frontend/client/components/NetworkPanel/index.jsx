@@ -18,6 +18,9 @@ import {Map} from 'immutable'
 import * as d3Hierarchy from 'd3-hierarchy'
 
 
+const MYGENE_URL = 'http://mygene.info/v3'
+
+
 class NetworkPanel extends Component {
 
   constructor(props) {
@@ -27,7 +30,13 @@ class NetworkPanel extends Component {
     };
   }
 
+  setGeneProps = () => {
+    // Just fetch property
+    const myGeneUrl = MYGENE_URL + '/query?q='
+    const qUrl = myGeneUrl + props.name
+    this.props.propertyActions.fetchPropertyFromUrl(props.id, qUrl, 'gene')
 
+  }
 
   selectNodes = (nodeIds, nodeProps) => {
     const node = nodeIds[0]
@@ -40,19 +49,15 @@ class NetworkPanel extends Component {
     const nodeTypeTag = 'Gene_or_Term'
     const nodeType = props[nodeTypeTag]
 
-    if(nodeType === null || nodeType === undefined) {
+    if (nodeType === null || nodeType === undefined) {
       // Error handler will be here...
       return
     }
 
     console.log('-------------> type: ' + nodeType)
 
-
-    if(nodeType === 'Gene') {
-      // Just fetch property
-      const myGeneUrl = 'http://mygene.info/v3/gene'
-      const qUrl = myGeneUrl + '/' + props.name
-      this.props.propertyActions.fetchPropertyFromUrl(props.id, qUrl, 'gene')
+    if (nodeType === 'Gene') {
+      this.setGeneProps()
       return
     }
     // From NDEx to CYJS converter
@@ -62,18 +67,26 @@ class NetworkPanel extends Component {
     console.log('====== Node selected: ');
     console.log(props)
 
-    const link = baseUrl + props[linkKey]
+    const link = baseUrl + props[linkKey] + '?server=test'
     console.log(link);
 
-    window.setTimeout(()=>{
+    window.setTimeout(() => {
       // Path finding
 
-      // const root = this.props.trees[this.props.currentNetwork.id].rootNode
-      //
-      // this.props.eventActions.selected(nodeProps[nodeIds[0]])
-      // this.props.commandActions.findPath({startId:nodeIds[0].replace(/\:/, '\\:'), endId: root.replace(/\:/, '\\:')})
+      const curNetId = this.props.currentNetwork.id
+      const netUrl = this.props.trees[curNetId].url
+      const networkProp = this.props.network
+      const networkData = networkProp.get(netUrl)
+      const root = networkData.data.rootId
 
-      const options = this.props.trees[this.props.currentNetwork.id].searchOptions
+      this.props.eventActions.selected(nodeProps[nodeIds[0]])
+
+      const startNode = nodeIds[0]
+      const endNode = root
+      console.log('*************** PATH from: ' + startNode + ' ==============>  ' + endNode)
+      this.props.commandActions.findPath({startId: startNode, endId: endNode})
+
+      // const options = this.props.trees[this.props.currentNetwork.id].searchOptions
       // this.props.propertyActions.fetchEntry(props.id, options)
 
       // Directly set prop from node attributes
@@ -89,11 +102,8 @@ class NetworkPanel extends Component {
     console.log(edgeProps)
   }
 
-// Then use it as a custom handler
-  getCustomEventHandlers = () => ({
-    selectNodes: this.selectNodes,
-    selectEdges: this.selectEdges
-  })
+  // Then use it as a custom handler
+  getCustomEventHandlers = () => ({selectNodes: this.selectNodes, selectEdges: this.selectEdges})
 
   handleBack = () => {
     browserHistory.push('/')
@@ -106,26 +116,23 @@ class NetworkPanel extends Component {
 
   }
 
-
   componentWillReceiveProps(nextProps) {
     const nextNet = nextProps.currentNetwork
     const newUrl = nextProps.trees[nextNet.id].url
     const network = this.props.network.get(newUrl)
 
-    if(network === undefined || network === null) {
+    if (network === undefined || network === null) {
 
       // Need to fetch network data
-      if(nextNet.id !== this.props.currentNetwork.id) {
+      if (nextNet.id !== this.props.currentNetwork.id) {
         this.props.networkActions.fetchNetworkFromUrl(newUrl)
       }
-    } else {
-
-    }
+    } else {}
   }
 
   shouldComponentUpdate(nextProps, nextState) {
 
-    if(nextProps.commands.target === 'subnet') {
+    if (nextProps.commands.target === 'subnet') {
       return false
     }
 
@@ -135,7 +142,7 @@ class NetworkPanel extends Component {
     const curNetId = curNet.id
     const nextNetId = nextNet.id
 
-    if(curNetId === nextNetId && nextProps.network.get('loading') === this.props.network.get('loading')) {
+    if (curNetId === nextNetId && nextProps.network.get('loading') === this.props.network.get('loading')) {
       // Check commands difference
       if (this.props.commands !== nextProps.commands) {
         return true
@@ -147,7 +154,7 @@ class NetworkPanel extends Component {
     const newUrl = nextProps.trees[nextNetId].url
     const network = nextProps.network.get(newUrl)
 
-    if(network === undefined) {
+    if (network === undefined) {
       return false
     }
 
@@ -172,109 +179,117 @@ class NetworkPanel extends Component {
         <h3>Invalid URL</h3>
         <h3>Invalid NDEx ID</h3>
         <h3>Remote server is down</h3>
-        <ErrorIcon
-          color={'#ff0033'}
-          style={{width: '40%', height: '40%'}}
-        />
+        <ErrorIcon color={'#ff0033'} style={{
+          width: '40%',
+          height: '40%'
+        }}/>
 
-        <FlatButton
-          label="Back to Data Source Selector"
-          labelPosition='after'
-          labelStyle={{fontWeight: 700}}
-          icon={<BackIcon/>}
-          onClick={this.handleBack}
-        />
+        <FlatButton label="Back to Data Source Selector" labelPosition='after' labelStyle={{
+          fontWeight: 700
+        }} icon={< BackIcon />} onClick={this.handleBack}/>
       </div>
     )
   }
 
-  getVisualStyle = () => ({
-    style: [ {
-      "selector" : "node",
-      "css" : {
-        "content" : "data(name)",
-        "text-valign" : "center",
-        "text-halign" : "right",
-        "shape" : "ellipse",
-        "color" : "#666666",
-        "background-color" : "teal",
-        "height" : 10,
-        "width" : 10,
-        "font-size" : '0.1em',
-        "text-opacity" : 1,
-        'text-wrap': 'wrap',
-        // 'text-max-width': '850px',
-        'z-index': 1,
-        "text-margin-x": '0.2em'
+  getVisualStyle = (minSize, maxSize) => ({
+    style: [
+      {
+        "selector": "node",
+        "css": {
+          "content": "data(Label)",
+          "text-valign": "center",
+          "text-halign": "right",
+          "shape": "ellipse",
+          "color": "#666666",
+          "background-color": '#80DEEA',
+          "height": 2,
+          "width": 2,
+          "text-opacity": 0.8,
+          'text-wrap': 'wrap',
+          'z-index': 1,
+          'text-rotation': 'data(angle)'
+          // 'min-zoomed-font-size': '0.1em'
+        }
+      }, {
+        "selector": 'node[angle <= ' + (Math.PI * 1.5) + '][angle >=' + (Math.PI/2.0) + ']',
+        "css": {
+          'color': 'red'
+        }
+      }, {
+        "selector": "node[Gene_or_Term = 'Gene']",
+        "css": {
+          "font-size": 0.1,
+        }
+      }, {
+        "selector": "node[Gene_or_Term = 'Term']",
+        "css": {
+          'font-size': 'mapData(Size,' + minSize + ',' + maxSize + ', 2, 60)',
+          height: 'mapData(Size,' + minSize + ',' + maxSize + ', 1, 100)',
+          width: 'mapData(Size,' + minSize + ',' + maxSize + ', 1, 100)',
+          "background-color": "#607D8B"
+        }
+      }, {
+        "selector": "node[isRoot = 'True']",
+        "css": {
+          'font-size': '4em',
+          "background-color": 'darkorange',
+          "color": "darkorange"
+        }
+      }, {
+        "selector": "node:selected",
+        "css": {
+          "background-color": 'orange',
+          "font-size": '4em',
+          "color": 'orange',
+          "text-opacity": 1,
+          'z-index': 999
+        }
+      }, {
+        "selector": "edge",
+        "css": {
+          'curve-style': 'bezier',
+          "width": 1.0,
+          'opacity': 0.2,
+          'mid-target-arrow-shape': 'triangle',
+          'mid-target-arrow-color': 'rgb(152,152,152)',
+          'target-arrow-shape': 'triangle',
+          'target-arrow-color': 'rgb(152,152,152)',
+          "line-color": "rgb(152,152,152)"
+        }
+      }, {
+        "selector": "edge:selected",
+        "css": {
+          "line-color": 'orange',
+          'mid-target-arrow-color': 'orange',
+          'target-arrow-color': 'orange',
+          "width": 8,
+          'z-index': 999,
+          'opacity': 0.7
+        }
+      }, {
+        "selector": ".focused",
+        "css": {
+          "background-color": "teal",
+          "font-size": '4em',
+          "color": "teal",
+          "text-opacity": 1,
+          'text-max-width': '500px',
+          'z-index': 999,
+          "min-zoomed-font-size": 0,
+          width: 50,
+          height: 50
+        }
+      }, {
+        "selector": ".faded",
+        "css": {
+          "background-color": "black",
+          "line-color": "black",
+          color: "black",
+          opacity: 0.2
+        }
       }
-    }, {
-      "selector" : "node[Gene_or_Term = 'Term']",
-      "css" : {
-        "content" : "data(name)",
-        "font-size" : '2em',
-        "height" : "mapData(Size, 1, 1000, 5, 200)",
-        "width" : "mapData(Size, 1, 1000, 5, 200)",
-        "background-color" : "#607D8B"
-      }
-    }, {
-      "selector" : "node[name = 'CLIXO:141']",
-      "css" : {
-        'font-size': '2em',
-        "background-color" : "orange",
-        "color" : "orange",
-        'label': 'CLIXO:141'
-      }
-    }, {
-      "selector" : "node:selected",
-      "css" : {
-        "background-color" : "red",
-        "font-size" : '4em',
-        "color" : "red",
-        "text-opacity": 1,
-        'text-max-width': '400px',
-        'z-index': 109,
-        "min-zoomed-font-size": 0,
-        width: 25,
-        height: 25
-      }
-    }, {
-      "selector" : "edge",
-      "css" : {
-        "width" : 2.0,
-        'opacity': 0.4,
-        "line-color" : "rgb(132,132,132)",
-      }
-    }, {
-      "selector" : "edge:selected",
-      "css" : {
-        "line-color" : "red",
-        "width": 10,
-        'opacity': 1
-      }
-    }, {
-      "selector" : ".focused",
-      "css" : {
-        "background-color" : "teal",
-        "font-size" : '4em',
-        "color" : "teal",
-        "text-opacity": 1,
-        'text-max-width': '500px',
-        'z-index': 999,
-        "min-zoomed-font-size": 0,
-        width: 50,
-        height: 50
-      }
-    }, {
-      "selector" : ".faded",
-      "css" : {
-        "background-color" : "black",
-        "line-color" : "black",
-        color: "black",
-        opacity: 0.2
-      }
-    } ]
+    ]
   })
-
 
   render() {
     console.log('**** MAIN VIEW ============================================================== Custom node select function called! ========');
@@ -282,68 +297,41 @@ class NetworkPanel extends Component {
 
     const loading = this.props.network.get('loading')
 
-    if(loading) {
-      return (
-        <Loading />
-      )
+    if (loading) {
+      return (<Loading/>)
     }
 
     let commands = this.props.commands
-    if(commands.target === 'subnet') {
+    if (commands.target === 'subnet') {
       console.log("%%%%%ignore")
-      commands = Map({
-        command: '',
-        parameters: {}
-      })
+      commands = Map({command: '', parameters: {}})
     }
-
 
     const networkAreaStyle = {
       position: 'fixed',
       top: 0,
       left: 0,
       width: '100%',
-      height: '100%',
+      height: '100%'
     };
-
 
     const curNetId = this.props.currentNetwork.id
     const url = this.props.trees[curNetId].url
     const networkProp = this.props.network
     const networkData = networkProp.get(url)
 
-    let style = this.getVisualStyle()
-
-    console.log(style)
-
     // Default layout
     const rendOpts = {
       layout: 'preset'
     }
 
-
-
-    if(networkData === undefined) {
-      return (
-        <Loading />
-      )
+    if (networkData === undefined) {
+      return (<Loading/>)
     }
 
+    const style = this.getVisualStyle(networkData.data.minSize, networkData.data.maxSize)
 
-
-
-    return (
-      <CyViewer
-        key="mainView"
-        network={networkData}
-        networkType={'cyjs'}
-        style={networkAreaStyle}
-        networkStyle={style}
-        eventHandlers={this.getCustomEventHandlers()}
-        command={commands}
-        rendererOptions={rendOpts}
-      />
-    )
+    return (<CyViewer key="mainView" network={networkData} networkType={'cyjs'} style={networkAreaStyle} networkStyle={style} eventHandlers={this.getCustomEventHandlers()} command={commands} rendererOptions={rendOpts}/>)
   }
 
   getTree = (root, tree) => {
@@ -396,7 +384,7 @@ class NetworkPanel extends Component {
 
   applyLayout = (layoutMap, network) => {
     const nodes = network.elements.nodes
-    nodes.forEach(node=> {
+    nodes.forEach(node => {
       node.position.x = layoutMap[node.data.id][0]
       node.position.y = layoutMap[node.data.id][1]
     })
@@ -404,13 +392,13 @@ class NetworkPanel extends Component {
 
   walk = (node, layoutMap) => {
     const children = node.children
-    if(children === undefined || children.length === 0) {
+    if (children === undefined || children.length === 0) {
       console.log("Tree node = " + node.id)
 
       layoutMap[node.id] = [node.x, node.y]
       return
     } else {
-      children.forEach(child=> this.walk(child, layoutMap))
+      children.forEach(child => this.walk(child, layoutMap))
     }
   }
 }
