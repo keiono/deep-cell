@@ -1,23 +1,3 @@
-import {Client} from 'elasticsearch'
-import config from '../assets/config.json'
-
-const client = new Client({
-  host: config.backendServices.db,
-  log: 'info'
-});
-
-const DEF_OPTIONS = {
-  index: 'genes',
-  type: 'gene'
-}
-
-
-const ID_MAPPING_OPTIONS = {
-  index: 'terms',
-  type: 'go_term'
-}
-
-
 export const SEARCH = 'SEARCH'
 const search = (query, options) => {
   return {
@@ -52,22 +32,18 @@ const clearSearchResult = () => {
 const sendQuery = (query, options) => {
   let opt = options
 
-  if(options === undefined || options === null) {
-    opt = DEF_OPTIONS
-  }
-
-  return client.search({
-    index: opt.index,
-    type: opt.type,
-    size: 50,
-    body: {
-      query: {
-        match: {
-          _all: query
-        }
-      }
-    }
-  })
+  // return client.search({
+  //   index: opt.index,
+  //   type: opt.type,
+  //   size: 50,
+  //   body: {
+  //     query: {
+  //       match: {
+  //         _all: query
+  //       }
+  //     }
+  //   }
+  // })
 }
 
 

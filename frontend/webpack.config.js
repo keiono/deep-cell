@@ -1,12 +1,15 @@
-const rucksack = require('rucksack-css')
 const webpack = require('webpack')
 const path = require('path')
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
   context: path.join(__dirname, './client'),
   entry: {
-    jsx: './index.jsx',
-    html: './index.html',
+    jsx: [
+      './index.jsx'
+    ],
     vendor: [
       'react',
       'react-dom',
@@ -21,26 +24,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   module: {
-    loaders: [
-      {
-        test: /\.html$/,
-        loader: 'file?name=[name].[ext]'
-      },
-      { test: /\.json$/, loader: 'json' },
-      {
-        test: /\.css$/,
-        include: /client/,
-        loaders: [
-          'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        exclude: /client/,
-        loader: 'style!css'
-      },
+    rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -49,27 +33,50 @@ module.exports = {
         ]
       },
       {
+        test: /\.css$/,
+        include: /client/,
+        use: [
+          'style-loader',
+          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]'
+        ]
+      },
+      {
+        test: /\.css$/,
+        exclude: /client/,
+        loader: 'style-loader!css'
+      },
+      {
         test: /\.(png|jpg|jpeg|svg)$/,
-        loader: 'url',
+        loader: 'url-loader',
       },
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
-  postcss: [
-    rucksack({
-      autoprefixer: true
-    })
-  ],
+  // postcss: [
+  //   rucksack({
+  //     autoprefixer: true
+  //   })
+  // ],
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+    new webpack.NamedModulesPlugin(),
+
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
     new webpack.DefinePlugin({
       'process.env': {NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')}
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: 'index.html',
     })
   ],
   devServer: {
+    historyApiFallback: true,
+    host: '0.0.0.0',
     contentBase: './client',
-    hot: true
+    hot: true,
+    port: 3000
   }
 }
