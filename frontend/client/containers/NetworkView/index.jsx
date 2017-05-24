@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import * as networkSourceActions from '../../reducers/currentnetwork'
 import * as commandActions from '../../actions/commands'
 import * as eventActions from '../../actions/cyjs'
@@ -17,7 +17,7 @@ import * as searchActions from '../../actions/search'
 
 import * as networkActions from '../../actions/network'
 
-import {grey50, grey800} from 'material-ui/styles/colors';
+import { grey50, grey800 } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -29,21 +29,24 @@ import * as rawInteractionsActions from '../../actions/raw-interactions'
 
 import * as idmapActions from '../../actions/idmap'
 
+import Theme from './Theme'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
 
 // Theme settings
-const muiTheme = getMuiTheme({
-  appBar: {
-    color: grey800,
-  },
-  snackbar:{
-    textColor: 'white',
-    actionColor: '#555555'
-  }
-})
+const muiTheme = getMuiTheme(Theme)
+
+// const muiTheme = getMuiTheme({
+//   appBar: {
+//     color: grey800,
+//   },
+//   snackbar: {
+//     textColor: 'white',
+//     actionColor: '#555555'
+//   }
+// })
 
 const baseStyle = {
   position: 'fixed',

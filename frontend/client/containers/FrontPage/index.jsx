@@ -1,7 +1,6 @@
-import React, {Component} from 'react'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
-import {browserHistory} from 'react-router'
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -10,11 +9,9 @@ import * as ontologiesActions from '../../actions/ontologies'
 
 import style from './style.css'
 
-
-class Ontologies extends Component {
+class FrontPage extends Component {
 
   render() {
-
     return (
       <MuiThemeProvider>
         <TopPage
@@ -40,4 +37,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Ontologies)
+)(FrontPage)
