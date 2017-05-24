@@ -54,11 +54,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
-  // postcss: [
-  //   rucksack({
-  //     autoprefixer: true
-  //   })
-  // ],
   plugins: [
     new webpack.NamedModulesPlugin(),
 

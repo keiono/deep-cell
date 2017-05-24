@@ -1,14 +1,6 @@
 import { createAction } from 'redux-actions'
-import {Client} from 'elasticsearch'
 
 import config from '../assets/config.json'
-
-
-
-const client = new Client({
-  host: config.backendServices.db,
-  log: 'info'
-});
 
 
 export const RUN_SIMULATION = 'RUN_SIMULATION'

@@ -35,7 +35,7 @@ class TitleBar extends Component {
 
 
 TitleBar.defaultProps = {
-  background: 'teal',
+  background: '#78909C'
 };
 
 export default TitleBar

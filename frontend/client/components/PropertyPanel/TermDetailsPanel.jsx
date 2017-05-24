@@ -1,37 +1,22 @@
 import React, {Component} from 'react'
+import {Tabs, Tab} from 'material-ui/Tabs';
 
-import {List, ListItem} from 'material-ui/List';
-
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 import TitleBar from './TitleBar'
 
 import RawInteractionPanel from './RawInteractionPanel'
-import GeneList from './GeneList'
 import PropListPanel from './PropListPanel'
-
-import Immutable from 'immutable'
-import FilterPanel from './FilterPanel'
-
 import SimpleGeneList from './SimpleGeneList'
 
 import Loading from '../Loading'
-import OpenIcon from 'material-ui/svg-icons/action/open-in-new'
 
-import * as d3Scale from 'd3-scale'
-import * as d3ScaleChromatic from 'd3-scale-chromatic'
-
-const colorFunction = d3Scale.scaleOrdinal(d3ScaleChromatic.schemeDark2)
 
 const descriptionStyle = {
   background: '#BEBEB4',
   padding: '0.2em'
 }
 
-const disabledStyle = {
-  background: '#999999'
-}
 
 class TermDetailsPanel extends Component {
 
@@ -104,27 +89,30 @@ class TermDetailsPanel extends Component {
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@ render PANEL @@@@@@@@@@@@@@@@@@@@")
 
     return (
-      <div>
-        <RawInteractionPanel
-          subnet={interactions}
-          selectedTerm={this.props.currentProperty.id}
-          handleClose={this.props.handleClose}
-          commandActions={this.props.commandActions}
-          loading={this.props.currentProperty.loading}
-        />
+        <div>
+          <RawInteractionPanel
+              subnet={interactions}
+              selectedTerm={this.props.currentProperty.id}
+              handleClose={this.props.handleClose}
+              commandActions={this.props.commandActions}
+              loading={this.props.currentProperty.loading}
+          />
 
-        <FilterPanel colorFunction={colorFunction} setScore={this.setScore}/>
+          <Tabs>
+            <Tab label="Term Details">
+              <TitleBar title={entry.name}/>
 
-        <TitleBar title={entry.name}/>
+              <Divider/>
 
-        <Divider/>
-
-        <PropListPanel data={entry}/>
-
-        <SimpleGeneList genes={nodeList}/>
-
-
-      </div>
+              <PropListPanel data={entry}/>
+            </Tab>
+            <Tab label="Assigned Genes">
+              <SimpleGeneList genes={nodeList}/>
+            </Tab>
+            <Tab label="Interactions">
+            </Tab>
+          </Tabs>
+        </div>
     )
   }
 
