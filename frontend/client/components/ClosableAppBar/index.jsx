@@ -8,9 +8,6 @@ import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 
 import Drawer from 'material-ui/Drawer'
 
-import style from './style.css'
-import classnames from 'classnames'
-
 
 import NetworkSelector from '../NetworkSelector'
 
@@ -59,7 +56,6 @@ export default class ClosableAppBar extends Component {
           title={this.props.title}
           onLeftIconButtonTouchTap={this.openMenu}
           children={
-
             <NetworkSelector
               messageActions={this.props.messageActions}
               trees={this.props.trees}

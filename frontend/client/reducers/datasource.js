@@ -1,19 +1,18 @@
-import {handleActions} from 'redux-actions'
-import {Map} from 'immutable'
+import { handleActions } from 'redux-actions'
+import { Map } from 'immutable'
 
 const defaultState = Map({
-  networkUrl: null,
-  styleUrl: null
+  uuid: '',
+  serverUrl: 'http://test.ndexbio.org'
 })
 
 
 export default handleActions({
-  SET_NETWORK_SOURCE: (state, action) => (
-    state.set('networkUrl', action.payload)
+  ADD_DATA_SOURCE: (state, action) => (
+    state
+      .set('uuid', action.payload.uuid)
+      .set('serverUrl', action.payload.serverUrl)
   ),
-  SET_STYLE_SOURCE: (state, action) => (
-    state.set('styleUrl', action.payload)
-  )
+  REMOVE_DATA_SOURCE: (state, action) => (defaultState)
 }, defaultState)
-
 

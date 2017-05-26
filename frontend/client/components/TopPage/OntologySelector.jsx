@@ -1,39 +1,72 @@
 import React, {Component} from 'react'
 
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import * as Colors from 'material-ui/styles/colors'
 
+import {browserHistory} from 'react-router'
 import style from './style.css'
 
 class OntologySelector extends Component {
 
-  state = {
-    value: 1
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      uuid: '',
+      serverUrl: props.dataSource.get('serverUrl')
+    }
+  }
 
-  handleChange = (event, index, value) => this.setState({value});
+  handleUuidChange = event => {
+    this.setState({
+      uuid: event.target.value
+    })
+  }
+
+  handleUrlChange = event => {
+    this.setState({
+      url: event.target.value
+    })
+  }
+
+  handleStart = () => {
+
+    console.log(this.state)
+    this.props.dataSourceActions.addDataSource(this.state)
+
+    browserHistory.push('/app')
+  }
 
   render() {
 
-    const ontologies = this.props.ontologies.toJS()
-    const names = Object.keys(ontologies)
+    console.log("--------Front prop ----------")
+    console.log(this.props)
 
     return (
       <div className={style.dataSource}>
-        <div className={style.source}>
-          <SelectField floatingLabelText="Select an ontology" value={this.state.value} onChange={this.handleChange} autoWidth={true}>
-            {
-              names.map(
-                (val, i) => {
-                  return <MenuItem key={i} value={val} primaryText={val}/>
-                })
-            }
+        <TextField
+          className={style.source}
+          hintText='e.g. http://test.ndexbio.org'
+          floatingLabelText='NDEx Server URL'
+          value={this.state.serverUrl}
+          onChange={this.handleUrlChange}
+        />
 
-          </SelectField>
-        </div>
-        <TextField className={style.source} hintText="Ontology Name:" floatingLabelText=""/>
-        <TextField className={style.source} hintText="URL of ontology:" floatingLabelText=""/>
+        <TextField
+          className={style.source}
+          floatingLabelText="UUID of the main hierarchy"
+          value={this.state.uuid}
+          onChange={this.handleUuidChange}
+        />
+
+        <section className={style.start}>
+
+          <FlatButton
+            className={style.startButton}
+            label="Start"
+            onClick={this.handleStart}
+          />
+        </section>
       </div>
     )
   }

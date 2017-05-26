@@ -62,7 +62,7 @@ class NetworkPanel extends Component {
     }
     // From NDEx to CYJS converter
     const linkKey = 'ndex_internalLink'
-    const baseUrl = 'http://localhost:3001/ndex2cyjs/'
+    const baseUrl = 'http://ci-dev-serv.ucsd.edu:3001/ndex2cyjs/'
 
     console.log('====== Node selected: ');
     console.log(props)

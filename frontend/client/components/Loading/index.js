@@ -5,7 +5,6 @@ import classnames from 'classnames'
 export default class Loading extends Component {
 
   render() {
-
     return (
       <div style={this.props.style}>
         <div className={style.loader}>
